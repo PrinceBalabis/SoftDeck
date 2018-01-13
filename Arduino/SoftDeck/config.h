@@ -21,14 +21,14 @@ const long timeout = 5;
   -------------------------------------------------------------
 **/
 
-// Modifier press and release command. String to put in front of each text which is wished to be declared a command and NOT a text
+// Macro press and release command. String to put in front of each text which is wished to be declared a command and NOT a text
 const String modifierPressCall = "d9D4";
 
-// Modifier press-hold command. String to put in front of each text which is wished to be declared a command and NOT a text
+// Macro press-hold command. String to put in front of each text which is wished to be declared a command and NOT a text
 const String modifierPressHoldCall = "k4C3";
 
-// Modifier release-hold command. String to put in front of each text which is wished to be declared a command and NOT a text
+// Macro release-hold command. String to put in front of each text which is wished to be declared a command and NOT a text
 const String modifierReleasePressHoldCall = "K0t4";
 
-// Modifier release-all-hold command.
+// Macro release-all-hold command.
 const String modifierReleaseAllCall = "k7G8";

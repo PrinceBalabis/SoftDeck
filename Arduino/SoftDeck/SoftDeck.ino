@@ -1,52 +1,10 @@
 /*-------------------------------------------------------------
 
-  For best integration with Android phone, stick an NFC tag on the SoftDeck adapter,
-  and make Tasker connect to bluetooth, launch the Android app and set display to never shut down.
-
-  Simple receiving/sending between bluetooth-connected deviced and Arduino serial monitor
-  If you use the Tinysine bluetooth module HM-10, then use their app for testing to
-  connect and send/receive data, which you can get
-  From their HM-10 product page. You can also download the source-code for their app
-  To make your own version for custom functions.
-
-
-  Setting up Bluetooth configuration
-  - Connect Blueooth module to Serial-to-USB adapter
-  - Open Arduino Serial Monitor
-  - Set to "No line ending" & 9600 baud(9600 baud is default but try 38400 or 115200 if that didnt work)
-  - Send "AT" twice to test if AT commands work
-
-  Setup TinySine bluetooth module with the Windows program which can be downloaded on their site: https://www.tinyosshop.com/bluetooth-ble-module-ibeacon
-  Press Factory Set and it should work out of the box
-
-  Connect Bluetooth module to Arduino
-  Connect the bluetooth module RX pin to Arduino TX pin
-  Connect the bluetooth module TX pin to Arduino RX pin
-
-  Default bluetooth password is 000000
-
-
-  -----------------------
-  Problems and solutions:
-
-  Easily create new macros, and fast.
-  All new macros shold be created on the Android app.
-  No Arduino tweaking should be necessary.
-  This means implementing all available keyboard modifiers and executing them via custom messages
-  received from the Android client.
-  Also features like delay, releaseall etc must be implemented for full micro customization
-  capabilities from the Android app.
+  SoftDeck
+  
 
   -------------------------------------------------------------
 */
-
-
-
-
-
-
-
-
 
 
 //-------------------------------------------------------------

@@ -8,9 +8,7 @@ void decodeMessage(String message) {
   if (message.startsWith(modifierPressCall)) { // Press command
     Serial.println("Message assumed to be a Press-and-release command");
     char tempCommand = modifierProcessing(message);
-    Keyboard.press(tempCommand); // Perform the command
-    delay(1); // Only hold the set ms
-    Keyboard.release(tempCommand); // Perform the command
+    Keyboard.write(tempCommand); // Perform the command
   } else if (message.startsWith(modifierPressHoldCall)) { // Press-hold command
     Serial.println("Message assumed to be a Press-and-hold command");
     char tempCommand = modifierProcessing(message);
@@ -24,7 +22,7 @@ void decodeMessage(String message) {
     Keyboard.releaseAll();
   } else {
     Serial.println("Message assumed to be a normal print-text");
-    keyboardPrint(message);
+    Keyboard.print(message);
   }
 }
 
@@ -36,7 +34,4 @@ char modifierProcessing(String messageCommmand) {
   return tempCommand;
 }
 
-void keyboardPrint(String message) {
-  Keyboard.print(message); // Type the ASCII value from what you received:
-}
 
