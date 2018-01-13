@@ -6,22 +6,22 @@ void decodeMessage(String message) {
   // Check if the message contains the command declaration at the start of the message
 
   if (message.startsWith(modifierPressCall)) { // Press command
-    Serial.println("Message assumed to be a Press-and-release command");
+    Serial.println("Press-and-release command");
     char tempCommand = modifierProcessing(message);
     Keyboard.write(tempCommand); // Perform the command
   } else if (message.startsWith(modifierPressHoldCall)) { // Press-hold command
-    Serial.println("Message assumed to be a Press-and-hold command");
+    Serial.println("Press-and-hold command");
     char tempCommand = modifierProcessing(message);
     Keyboard.press(tempCommand); // Perform the command
   } else if (message.startsWith(modifierReleasePressHoldCall)) { // Release-all command
-    Serial.println("Message assumed to be a release command");
+    Serial.println("Release-key command");
     char tempCommand = modifierProcessing(message);
     Keyboard.release(tempCommand); // Perform the command
   } else if (message.startsWith(modifierReleaseAllCall)) { // Release-all command
-    Serial.println("Message assumed to be a release-all command");
+    Serial.println("Release-all-keys command");
     Keyboard.releaseAll();
   } else {
-    Serial.println("Message assumed to be a normal print-text");
+    Serial.println("Normal string-print command");
     Keyboard.print(message);
   }
 }

@@ -1,6 +1,7 @@
-//-------------------------------------------------------------
-// Basic configuration
-//-------------------------------------------------------------
+/**-------------------------------------------------------------
+  Basic configuration
+  -------------------------------------------------------------
+**/
 // The configured serial rate of the bluetooth module
 const int bluetoothSerialRate = 9600;
 
@@ -12,7 +13,6 @@ const int delayBetweenATCommands = 1000;
 
 // Timeout. Time before giving up on waiting for new character in buffer (milliseconds). With OnePlus 5T+Tinysine+9600baud, timeout= 10ms seems to work fine(could maybe go lower)
 const long timeout = 5;
-
 
 
 /**-------------------------------------------------------------
