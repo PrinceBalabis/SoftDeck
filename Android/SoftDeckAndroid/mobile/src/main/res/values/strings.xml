@@ -1,3 +1,77 @@
 <resources>
+    <!-- SoftDeck Macro commands -->
+    <string name="softdeck_press_and_release">d9D4</string>
+    <string name="softdeck_press_and_hold">k4C3</string>
+    <string name="softdeck_release_a_key">K0t4</string>
+    <string name="softdeck_release_all_keys">k7G8</string>
+
+    <!-- SoftDeck/Arduino modifier key decimal values -->
+    <!-- From: https://www.arduino.cc/en/Reference/KeyboardModifiers -->
+    <string name="key_left_ctrl">128</string>
+    <string name="key_left_shift">129</string>
+    <string name="key_left_alt">130</string>
+    <string name="key_left_gui">131</string><!-- For Windows computers this is the Win-key, for Macs its the CMD key -->
+    <string name="key_right_ctrl">132</string>
+    <string name="key_right_shift">133</string>
+    <string name="key_right_alt">134</string>
+    <string name="key_right_gui">135</string>
+    <string name="key_up_arrow">218</string>
+    <string name="key_down_arrow">217</string>
+    <string name="key_left_arrow">216</string>
+    <string name="key_right_arrow">215</string>
+    <string name="key_backspace">178</string>
+    <string name="key_tab">179</string>
+    <string name="key_return">176</string>
+    <string name="key_esc">177</string>
+    <string name="key_insert">209</string>
+    <string name="key_delete">212</string>
+    <string name="key_page_up">211</string>
+    <string name="key_page_down">214</string>
+    <string name="key_home">210</string>
+    <string name="key_end">213</string>
+    <string name="key_caps_lock">193</string>
+    <string name="key_f1">194</string>
+    <string name="key_f2">195</string>
+    <string name="key_f3">196</string>
+    <string name="key_f4">197</string>
+    <string name="key_f5">198</string>
+    <string name="key_f6">199</string>
+    <string name="key_f7">200</string>
+    <string name="key_f8">201</string>
+    <string name="key_f9">202</string>
+    <string name="key_f10">203</string>
+    <string name="key_f11">204</string>
+    <string name="key_f12">205</string>
+
+    <!-- App-related -->
     <string name="app_name">SoftDeck</string>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">BLE Device Scan</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="is_serial">Serial Present:</string>
+    <string-array name="roygbiv">
+        <item >Red</item>
+        <item >Green</item>
+        <item >Blue</item>
+    </string-array>
+    <string name="button">Send</string>
+    <string name="red_slide">Red</string>
+    <string name="blue_slide">Blue</string>
+    <string name="green_slide">Green</string>
 </resources>

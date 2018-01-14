@@ -1,13 +1,9 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.princetronics.softdeck"
+        applicationId "com.princetronics.softdeckandroid"
         minSdkVersion 25
         targetSdkVersion 26
         versionCode 1
@@ -23,7 +19,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.google.android.support:wearable:2.1.0'
     implementation 'com.google.android.gms:play-services-wearable:11.8.0'
     implementation 'com.android.support:percent:26.1.0'

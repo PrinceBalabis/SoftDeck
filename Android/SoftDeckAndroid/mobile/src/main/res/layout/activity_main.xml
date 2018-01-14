@@ -1,71 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context="com.princetronics.softdeck.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.princetronics.softdeckandroid.MainActivity">
 
-<EditText
-    android:id="@+id/editText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true" />
+    <TextView
+        android:id="@+id/sample_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<Button
-    android:id="@+id/buttonStart"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_below="@+id/editText"
-    android:onClick="onClickStart"
-    android:text="Begin" />
-
-<Button
-    android:id="@+id/buttonSend"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/editText"
-    android:layout_toEndOf="@+id/buttonStart"
-    android:layout_toRightOf="@+id/buttonStart"
-    android:onClick="onClickSend"
-    android:text="Send" />
-
-<TextView
-    android:id="@+id/textView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignEnd="@+id/editText"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_alignRight="@+id/editText"
-    android:layout_below="@+id/buttonSend"
-    android:singleLine="true" />
-
-<Button
-    android:id="@+id/buttonStop"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/editText"
-    android:layout_toEndOf="@+id/buttonSend"
-    android:layout_toRightOf="@+id/buttonSend"
-    android:onClick="onClickStop"
-    android:text="Stop" />
-
-<Button
-    android:id="@+id/buttonClear"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/editText"
-    android:layout_toEndOf="@+id/buttonStop"
-    android:layout_toRightOf="@+id/buttonStop"
-    android:onClick="onClickClear"
-    android:text="Clear" />
-
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

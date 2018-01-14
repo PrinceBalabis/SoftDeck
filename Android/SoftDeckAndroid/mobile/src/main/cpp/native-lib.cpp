@@ -5,7 +5,7 @@ extern "C"
 JNIEXPORT jstring
 
 JNICALL
-Java_com_princetronics_softdeck_MainActivity_stringFromJNI(
+Java_com_princetronics_softdeckandroid_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
