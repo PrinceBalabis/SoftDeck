@@ -54,7 +54,7 @@ The rest of the characters "133" is the decimal value for the right-shift-button
 Another example is to send "k0t4133", which will release the Shift key.
 Another example is to send "k7G8", which will release ALL currently held keys
 Another example is to send "d9D4131", which will press the Windows key(bring up the Start Menu)
-Another example is to send "k4C3131"(Hold Win), then right after send the "d9D4l"(press-and-release l), and then send k7G8(release-all-keys) this will perform WIN+L, which will lock the computer
+Another example is to send "k4C3131"(Hold Win), then right after send the "l"(press-and-release l), and then send k7G8(release-all-keys) this will perform WIN+L, which will lock the computer
 
 Macro action codes list:
 Press once: "d9D4"

@@ -54,17 +54,23 @@
             android:textSize="18sp" />
 
     </LinearLayout>
-    <SeekBar
-        android:id="@+id/seekRed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="255"
-        />
 
     <Button
         android:id="@+id/button_lock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lock" />
+
+    <Button
+        android:id="@+id/button_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password" />
+
+    <Button
+        android:id="@+id/button_notepadplusplus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NotePad++" />
 
 </LinearLayout>

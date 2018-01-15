@@ -5,7 +5,24 @@ void decodeMessage(String message) {
   //Serial.println("Decoding message...");
   // Check if the message contains the command declaration at the start of the message
 
-  if (message.startsWith(modifierPressCall)) { // Press command
+  if (message.startsWith("OK+LOST")) { // Message printed when connection is lost
+    Serial.println("Connection lost");
+    Serial.println("Locking computer due to user being AFK...");
+    //Perform computer lock!
+    char tempCommand = modifierProcessing("k4C3131"); // Press and hold Win-key
+    Keyboard.press(tempCommand); // Perform the command
+    delay(300);
+    //tempCommand = modifierProcessing("d9D4l"); // press l key
+    //Keyboard.write(tempCommand); // Perform the command
+    Keyboard.print("l");
+    delay(600);
+    tempCommand = modifierProcessing("k7G8"); // Release-all-keys
+    Keyboard.write(tempCommand); // Perform the command
+  } else if (message.startsWith("OK+CONN")) { // Message printed when connection is made
+    Serial.println("Connection made!");
+  } else if (message.startsWith("www.jnhuamao.cn")) { // Boot message from HM-10 module, just catch and throw this out
+    Serial.println("Bluetooth module started");
+  } else if (message.startsWith(modifierPressCall)) { // Press command
     Serial.println("Press-and-release command");
     char tempCommand = modifierProcessing(message);
     Keyboard.write(tempCommand); // Perform the command
