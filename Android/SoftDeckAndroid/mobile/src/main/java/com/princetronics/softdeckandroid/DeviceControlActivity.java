@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -28,15 +29,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -45,7 +43,7 @@ import java.util.UUID;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity {
+public class DeviceControlActivity extends Activity implements View.OnClickListener {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
     private TextView mConnectionState;
@@ -59,8 +57,7 @@ public class DeviceControlActivity extends Activity {
     private BluetoothGattCharacteristic characteristicRX;
 
 
-    public final static UUID HM_RX_TX =
-            UUID.fromString(SampleGattAttributes.HM_RX_TX);
+    public final static UUID HM_RX_TX = UUID.fromString(SampleGattAttributes.HM_RX_TX);
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
@@ -76,6 +73,11 @@ public class DeviceControlActivity extends Activity {
 
     private String deviceName = "SoftDeck";
     private String deviceAddress = "7C:66:9D:9A:B0:26";
+
+    //Vibration
+    Vibrator vibe;
+    Button buttonLock, buttonPassword, buttonNotepadplusplus;
+    static String dataReceived = "";
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -111,19 +113,30 @@ public class DeviceControlActivity extends Activity {
                 mConnected = true;
                 updateConnectionState(R.string.connected);
                 invalidateOptionsMenu();
+                setButtonStatus(true);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 updateConnectionState(R.string.disconnected);
                 invalidateOptionsMenu();
                 clearUI();
+                setButtonStatus(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(mBluetoothLeService.EXTRA_DATA));
+                Log.d(TAG, "Received data");
+                String tempDataReceived = intent.getStringExtra(mBluetoothLeService.EXTRA_DATA);
+                dataReceived = tempDataReceived; // Used for queue commands to SoftDeck adapter
+                displayData(tempDataReceived);
             }
         }
     };
+
+    private void setButtonStatus(boolean status) {
+        buttonLock.setEnabled(status);
+        buttonPassword.setEnabled(status);
+        buttonNotepadplusplus.setEnabled(status);
+    }
 
     private void clearUI() {
         mDataField.setText(R.string.no_data);
@@ -134,19 +147,16 @@ public class DeviceControlActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gatt_services_characteristics);
 
+        // Set up vibration motor control
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         // Sets up UI references.
         mConnectionState = (TextView) findViewById(R.id.connection_state);
-
         mDataField = (TextView) findViewById(R.id.data_value);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
-        addListenerOnButton();
-        // Start the
-        Log.d("Custom", "SoftDeckConnection created...");
-        //getActionBar().setTitle(R.string.title_devices);
         mHandler = new Handler();
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -158,8 +168,7 @@ public class DeviceControlActivity extends Activity {
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
@@ -169,11 +178,19 @@ public class DeviceControlActivity extends Activity {
             return;
         }
 
-        // Prompt for permissions
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // Prompt for Location permissions, needed for bluetooth
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.w("BleActivity", "Location access not granted!");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSION_RESPONSE);
         }
+
+        // Bind buttons to listeners
+        buttonLock = (Button) findViewById(R.id.button_lock);
+        buttonPassword = (Button) findViewById(R.id.button_password);
+        buttonNotepadplusplus = (Button) findViewById(R.id.button_notepadplusplus);
+        buttonLock.setOnClickListener(this);
+        buttonPassword.setOnClickListener(this);
+        buttonNotepadplusplus.setOnClickListener(this);
     }
 
     @Override
@@ -185,7 +202,6 @@ public class DeviceControlActivity extends Activity {
             final boolean result = mBluetoothLeService.connect(deviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
-
 
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
@@ -226,9 +242,11 @@ public class DeviceControlActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.gatt_services, menu);
         if (mConnected) {
+            vibe.vibrate(100);
             menu.findItem(R.id.menu_connect).setVisible(false);
             menu.findItem(R.id.menu_disconnect).setVisible(true);
         } else {
+            vibe.vibrate(100);
             menu.findItem(R.id.menu_connect).setVisible(true);
             menu.findItem(R.id.menu_disconnect).setVisible(false);
         }
@@ -237,19 +255,84 @@ public class DeviceControlActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_connect:
+                vibe.vibrate(100);
                 mBluetoothLeService.connect(deviceAddress);
                 return true;
             case R.id.menu_disconnect:
+                vibe.vibrate(100);
                 mBluetoothLeService.disconnect();
-                return true;
-            case android.R.id.home:
-                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_lock:
+                new Thread(new Runnable() {
+                    public void run() {
+                        Log.d("ManualPrinting", "Lock Button Pressed");
+                        sendSoftDeckMessage(getString(R.string.softdeck_release_all_keys)); // Release-all-keys
+                        customSleepThread(500);
+                        sendSoftDeckMessage(getString(R.string.softdeck_press_and_hold) + getString(R.string.key_left_gui)); // Press-hold Win key
+                        customSleepThread(500);
+                        sendSoftDeckMessage("l"); // Press-release l key
+                        customSleepThread(1000);
+                        sendSoftDeckMessage(getString(R.string.softdeck_release_all_keys)); // Release-all-keys
+                        customSleepThread(500);
+                    }
+                }).start();
+                break;
+            case R.id.button_password:
+                new Thread(new Runnable() {
+                    public void run() {
+                        Log.d("ManualPrinting", "Password Button Pressed");
+                        vibe.vibrate(100);
+                        sendSoftDeckMessage("mysecretpassword"); // Send password
+                        customSleepThread(500);
+                    }
+                }).start();
+                break;
+            case R.id.button_notepadplusplus:
+                new Thread(new Runnable() {
+                    public void run() {
+                        Log.d("ManualPrinting", "NotePad++ Button Pressed");
+                        vibe.vibrate(100);
+                        sendSoftDeckMessage(getString(R.string.softdeck_release_all_keys)); // Release-all-keys
+                        customSleepThread(500);
+                        sendSoftDeckMessage(getString(R.string.softdeck_press_and_release) + getString(R.string.key_left_gui)); // Press-release Win key
+                        customSleepThread(500);
+                        sendSoftDeckMessage("notepad"); // Type notepad++ x32 standard directory executable
+                        customSleepThread(1500);
+                        sendSoftDeckMessage(getString(R.string.softdeck_press_and_release) + getString(R.string.key_return)); // Press-release Enter key
+                        customSleepThread(500);
+                    }
+                }).start();
+                break;
+        }
+    }
+
+    private void customSleepThread(int delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendSoftDeckMessage(String message) {
+        final byte[] tx = message.getBytes();
+        if (mConnected) {
+            characteristicTX.setValue(tx);
+            mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
+            mBluetoothLeService.setCharacteristicNotification(characteristicRX, true);
+        }
+    }
+
 
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
@@ -292,7 +375,6 @@ public class DeviceControlActivity extends Activity {
             characteristicTX = gattService.getCharacteristic(BluetoothLeService.UUID_HM_RX_TX);
             characteristicRX = gattService.getCharacteristic(BluetoothLeService.UUID_HM_RX_TX);
         }
-
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -304,121 +386,20 @@ public class DeviceControlActivity extends Activity {
         return intentFilter;
     }
 
-    public void addListenerOnButton() {
-
-        button = (Button) findViewById(R.id.button_lock);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Log.d("ManualPrinting","Lock Button Pressed");
-                String messageToBeSentTest = getString(R.string.softdeck_press_and_hold)+getString(R.string.key_left_gui); // Press-hold Win key
-                final byte[] tx = messageToBeSentTest.getBytes();
-                if(mConnected) {
-                    Log.d("ManualPrinting","Press-hold WIN");
-                    characteristicTX.setValue(tx);
-                    mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                    mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                }
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        String messageToBeSentTest = "l"; // Press-release l key
-                        final byte[] tx = messageToBeSentTest.getBytes();
-                        if(mConnected) {
-                            Log.d("ManualPrinting","Press-release l");
-                            characteristicTX.setValue(tx);
-                            mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                            mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                        }
-                    }
-                }, 500);
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        String messageToBeSentTest = getString(R.string.softdeck_release_all_keys); // Press-release l key
-                        final byte[] tx = messageToBeSentTest.getBytes();
-                        if(mConnected) {
-                            Log.d("ManualPrinting","Release-all-keys");
-                            characteristicTX.setValue(tx);
-                            mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                            mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                        }
-                    }
-                }, 1000);
-            }
-        });
-        button = (Button) findViewById(R.id.button_password);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Log.d("ManualPrinting","Password Button Pressed");
-                String messageToBeSentTest = "mysecretpassword"; // Press-release Win key
-                final byte[] tx = messageToBeSentTest.getBytes();
-                if(mConnected) {
-                    characteristicTX.setValue(tx);
-                    mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                    mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                }
-            }
-        });
-        button = (Button) findViewById(R.id.button_notepadplusplus);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Log.d("ManualPrinting","NotePad++ Button Pressed");
-                String messageToBeSentTest = getString(R.string.softdeck_press_and_release)+getString(R.string.key_left_gui); // Press-release Win key
-                final byte[] tx = messageToBeSentTest.getBytes();
-                if(mConnected) {
-                    characteristicTX.setValue(tx);
-                    mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                    mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                }
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        String messageToBeSentTest = "notepad"; // Type notepad++
-                        final byte[] tx = messageToBeSentTest.getBytes();
-                        if(mConnected) {
-                            Log.d("ManualPrinting","Type notepad");
-                            characteristicTX.setValue(tx);
-                            mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                            mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                        }
-                    }
-                }, 500);
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        String messageToBeSentTest = getString(R.string.softdeck_press_and_release)+getString(R.string.key_return); // Press-release Enter key
-                        final byte[] tx = messageToBeSentTest.getBytes();
-                        if(mConnected) {
-                            Log.d("ManualPrinting","Press-release Enter key");
-                            characteristicTX.setValue(tx);
-                            mBluetoothLeService.writeCharacteristic(characteristicTX); // Send to SoftDeck Adapter
-                            mBluetoothLeService.setCharacteristicNotification(characteristicRX,true);
-                        }
-                    }
-                }, 2000);
-            }
-        });
-    }
-
-    //    // Device scan callback.
+    // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
-
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             //Log.d("Custom", "FOUND DEVICE");
-                            if(!(device.getName() == null)){
+                            if (!(device.getName() == null)) {
                                 //Log.d("Custom", device.getName());
-                                if(device.getAddress().toString().equals(deviceAddress)){
-                                    Log.d("Custom", "Found SoftDeck bluetooth adapter");
+                                if (device.getAddress().toString().equals(deviceAddress)) {
+                                    Log.d("Custom", "Found SoftDeck Bluetooth adapter");
                                     //Toast.makeText(getApplicationContext(), "FOUND SOFTDECK", Toast.LENGTH_SHORT).show();
-
                                     if (mScanning) {
                                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                                         mScanning = false;

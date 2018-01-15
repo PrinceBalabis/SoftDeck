@@ -28,7 +28,7 @@ void setup()
   delay(6000); // Give Bluetooth module some time to initialize
 
   Serial.begin(arduinoSerialRate); // Open serial communications
-  while (!Serial);// FOR DEBUGGING ONLY. REMOVE FOR LIVE VERSION. Wait for serial port to connect. (Arduino will idle until serial communication is established)
+  //while (!Serial);// FOR DEBUGGING ONLY. REMOVE FOR LIVE VERSION. Wait for serial port to connect. (Arduino will idle until serial communication is established)
   delay(500); // Let capacitors stabilize
 
   Serial.println("Welcome to Testing Bluetooth Sketch!");
