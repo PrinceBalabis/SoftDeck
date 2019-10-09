@@ -1,0 +1,41 @@
+
+{
+	"buildFiles" : 
+	[
+		"C:/Users/Prince/Documents/GitHub/SoftDeck/Android/SoftDeckAndroid/mobile/CMakeLists.txt"
+	],
+	"cleanCommands" : 
+	[
+		"C:\\Users\\Prince\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\Prince\\Documents\\GitHub\\SoftDeck\\Android\\SoftDeckAndroid\\mobile\\.cxx\\cmake\\debug\\x86 --target clean"
+	],
+	"cppFileExtensions" : [ "cpp" ],
+	"libraries" : 
+	{
+		"native-lib-Debug-x86" : 
+		{
+			"abi" : "x86",
+			"artifactName" : "native-lib",
+			"buildCommand" : "C:\\Users\\Prince\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\Prince\\Documents\\GitHub\\SoftDeck\\Android\\SoftDeckAndroid\\mobile\\.cxx\\cmake\\debug\\x86 --target native-lib",
+			"buildType" : "debug",
+			"files" : 
+			[
+				
+				{
+					"flags" : "  --target=i686-none-linux-android24 --gcc-toolchain=C:/Users/Prince/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/Prince/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot  -Dnative_lib_EXPORTS  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "C:/Users/Prince/Documents/GitHub/SoftDeck/Android/SoftDeckAndroid/mobile/src/main/cpp/native-lib.cpp",
+					"workingDirectory" : "C:/Users/Prince/Documents/GitHub/SoftDeck/Android/SoftDeckAndroid/mobile/.cxx/cmake/debug/x86"
+				}
+			],
+			"output" : "C:/Users/Prince/Documents/GitHub/SoftDeck/Android/SoftDeckAndroid/mobile/build/intermediates/cmake/debug/obj/x86/libnative-lib.so",
+			"toolchain" : "3993248419"
+		}
+	},
+	"toolchains" : 
+	{
+		"3993248419" : 
+		{
+			"cCompilerExecutable" : "C:/Users/Prince/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+			"cppCompilerExecutable" : "C:/Users/Prince/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
+		}
+	}
+}
